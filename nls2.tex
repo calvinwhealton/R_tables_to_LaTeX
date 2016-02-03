@@ -1,0 +1,21 @@
+%	2016-02-03 15:54:32
+% output from R non-linear least squares regression
+% This is an example for writing an entire table from R including mathematical notation 
+\begin{table}[h!]
+\caption[NLS table all from R]{Nonlinear regression table written from R. Model is $y = \mu + \exp(\alpha x_1) + \beta \ln(x_2)$. The caption includes mathematical notation.}\label{nls2}\begin{center}
+\begin{tabular}{l l l l l}
+
+\hline
+SSE	&	94.26	&		&	DoF	&	97\\ 
+SSR	&	122.68	&		&	R2\_star	&	0.5654\\ 
+SST	&	216.91	&		&		&	\\ 
+RSE	&	0.986	&		&		&	\\ 
+\hline
+Variable	&	Est. Coeff.	&	Std. Error	&	t Stat.	&	Pr($>|t|$)\\ 
+\hline
+$\mu$	&	5.089e+00	&	2.983e-01	&	1.706e+01	&	5.837e-31\\ 
+$\alpha$	&	1.071e-01	&	2.579e-02	&	4.153e+00	&	7.06e-05\\ 
+$\beta$	&	1.851e+00	&	1.989e-01	&	9.304e+00	&	4.28e-15\\ 
+\hline\end{tabular}
+\end{center}
+\end{table}
