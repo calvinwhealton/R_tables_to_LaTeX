@@ -1,0 +1,21 @@
+%	2016-02-03 14:42:42	
+% output from R regression
+% This is an example for writing an entire table from R 
+\begin{table}[h!]
+\caption[OLS table all from R]{A table that is entirely written from R including captions (long and short) and label. The parameter names were defined in as different from the model output as well.}\label{ols2}\begin{center}
+\begin{tabular}{l l l l l}
+
+\hline
+SSE	&	92.82	&		&	DoF	&	97\\ 
+SSR	&	3422.78	&		&	R2	&	0.9736\\ 
+SST	&	3515.6	&		&	Adj.R2	&	0.9731\\ 
+RSE	&	0.978	&		&		&	\\ 
+\hline
+Variable	&	Est. Coeff.	&	Std. Error	&	t Stat.	&	Pr($>|t|$)\\ 
+\hline
+b0	&	4.787e+00	&	2.619e-01	&	1.827e+01	&	3.554e-33\\ 
+bx1	&	5.136e-01	&	3.791e-02	&	1.355e+01	&	4.231e-24\\ 
+bx2	&	2.011e+00	&	3.445e-02	&	5.839e+01	&	2.232e-77\\ 
+\hline\end{tabular}
+\end{center}
+\end{table}
