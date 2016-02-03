@@ -1,0 +1,39 @@
+\documentclass{article}
+
+\usepackage{caption}
+\usepackage{courier}
+\title{Example Tables}
+\author{Calvin Whealton}
+
+\begin{document}
+\maketitle
+
+\listoftables
+
+\newpage
+
+This is an example file showing how regression tables from R can be imported into \LaTeX using the code available on \texttt{https://github.com/calvinwhealton/R\_tables\_to\_LaTeX}.
+
+
+\section{Ordinary Least Squares}
+
+\begin{table}[h!]
+\caption{A table where only the table values are written, not the caption, label, and horizontal lines at the beginning and end of the table.}\label{ols1}
+\begin{center}
+\begin{tabular}{l l l l l}
+\hline
+\input{ols1.tex}
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\input{ols2.tex}
+
+\section{Nonlinear Least Squares}
+
+
+\section{Ordinary Least Squares}
+
+
+\end{document}
