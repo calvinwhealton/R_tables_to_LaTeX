@@ -7,6 +7,7 @@ write_latex_ols <- function(reg_obj         # regression object
                             , capShort=NULL # short caption
                             , comments=NULL # additional comments for the table
                             , label = NULL  # label for the table
+                            , noCon = FALSE # was no constant used, FALSE means no constant
                             , dec_sums=2    # number of decimals for SSE, SSR, SST
                             , dec_rse = 3   # number of decimals for RSE
                             , dec_r = 4     # number of decimals for R2 and AdjR2
@@ -16,11 +17,19 @@ write_latex_ols <- function(reg_obj         # regression object
   # calculatin and rounding variables for output
   sse <- round(sum(residuals(reg_obj)^2),dec_sums) # sum of squares error
   ssr <- round(sum((predict(reg_obj)-mean(predict(reg_obj)))^2),dec_sums) # sum of squares regression
-  sst <- round(sse+ssr,dec_sums)
+  if(noCon == FALSE){
+    sst <- round(sse+ssr,dec_sums) # sum of squares total, for this case sse + ssr = sst because of the constnat
+  }else{
+    sst <- round(sum((predict(reg_obj)+residuals(reg_obj)-mean(predict(reg_obj)+residuals(reg_obj)))^2),dec_sums) # sum of squares regression
+  }
+  
+  # degrees of freedom and residual standard error
   dof <- as.numeric(unlist(summary(reg_obj)["df"])["df2"])
   rse <- round(sqrt(sse/dof), dec_rse)
-  r2 <- round(as.numeric(unlist(summary(reg_obj)["r.squared"])),dec_r)
-  adjr2 <- round(as.numeric(unlist(summary(reg_obj)["adj.r.squared"])),dec_r)
+  
+  # R-squared and adjusted R-squared
+  r2 <- round(1 - sse/sst,dec_r)
+  adjr2 <- round(1 - (1-r2)*(length(residuals(reg_obj)-1))/dof,dec_r)
   
   # creating file
   file.create(name_tex)
@@ -29,7 +38,10 @@ write_latex_ols <- function(reg_obj         # regression object
   # writing date, time, and comments
   time <- Sys.time()
   cat(c("%", format(time),"\n" ), sep="\t")
-  cat(c("% output from R regression\n"))
+  cat("% output from R regression\n")
+  if(noCon == TRUE){
+    cat("% Regression does not include a constant, R^2 = 1 - SSE/SST\n")
+  }
   # printing additional comments
   if(length(comments != 0)){
     cat(c("%",comments,"\n"),sep=" ")
