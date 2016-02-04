@@ -1,21 +1,32 @@
 # funciton for writing OLS ANOVA tables into LaTeX tables----
 # output can include more regression results as defined by user
 write_latex_qreg <- function(reg_obj        # regression object
-                            , xs       # columns indices for x vectors
-                            , ys        # column indices for y vector
+                            , xs            # columns for x vectors
+                            , ys            # column for y vector
                             , name_tex      # name for latex table 
-                            , name_var       # names of variables
-                            , dec_ae = 3   # number of decimals for RSE
+                            , name_var=NULL # names of variables
+                            , caption=NULL  # caption for table, long caption
+                            , capShort=NULL # short caption
+                            , comments=NULL # additional comments for table
+                            , label=NULL    # table for table
+                            , RegQ = 0.5    # quantile regressed, median default
+                            , dec_ae = 3    # number of decimals for RSE
                             , dec_r = 4     # number of decimals for R2 and AdjR2
-                            , dec_co = 4
-                            , boots = 5000 # number of bootstrap replicates
+                            , dec_co = 4    # number of decimals for coefficients
+                            , boots = 5000  # number of bootstrap replicates
+                            , noCon = FALSE # include constant
                             ){
+  
+  # setting names as variables if names are not defined by user
+  if(length(name_var) == 0){
+    name_var <- names(coefficients(reg_obj))
+  }
   
   # regression output
   dof <- length(residuals(reg_obj))-length(name_var) # degrees of freedom
-  pseudosse <- sum(residuals(reg_obj)*(0.5-(residuals(reg_obj)<0))) # pseudo sse
+  pseudosse <- sum(residuals(reg_obj)*(RegQ-(residuals(reg_obj)<0))) # pseudo sse, assumed median regression
   const_mod <- rq(ys~1, tau=0.5) # fitting constant model
-  pseudosst <- sum(residuals(const_mod)*(0.5-(residuals(const_mod)<0))) # pseudo sst
+  pseudosst <- sum(residuals(const_mod)*(RegQ-(residuals(const_mod)<0))) # pseudo sst
   r2 <- round((1 - pseudosse/pseudosst) ,dec_r)
   
   # quantile output calculations
@@ -23,12 +34,17 @@ write_latex_qreg <- function(reg_obj        # regression object
   mae <- round(mean(abs(residuals(reg_obj))),dec_ae)
   
   # anova lower half of table
-  anova_mat <- matrix(0,nrow = length(name_var),ncol=4)
   set.seed(1)
-  boot_coeff <- boot.rq(xs, ys, tau = 0.5, R = boots, bsmethod = "xy")
+  if(noCon == TRUE){
+    anova_mat <- matrix(0,nrow = ncol(xs),ncol=4)
+    boot_coeff <- boot.rq(xs, ys, tau = RegQ, R = boots, bsmethod = "xy")
+  }else{
+    anova_mat <- matrix(0,nrow = ncol(xs)+1,ncol=4)
+    boot_coeff <- boot.rq(cbind(1,xs), ys, tau = RegQ, R = boots, bsmethod = "xy")
+  }
   coeff_se <- sqrt(diag(cov(boot_coeff)))
   
-  for(i in 1:length(name_var)){
+  for(i in 1:nrow(anova_mat)){
     anova_mat[i,1] <- coefficients(reg_obj)[i] # coefficient
     anova_mat[i,2] <- coeff_se[i] # standard error
     anova_mat[i,3] <- anova_mat[i,1]/anova_mat[i,2] # t statistic
@@ -43,8 +59,35 @@ write_latex_qreg <- function(reg_obj        # regression object
   time <- Sys.time()
   cat(c("%", format(time) ), sep="\t")
   cat(c("\n"))
-  cat(c("% output from R quantile regression"))
+  cat("% output from R quantile regression\n")
+  cat(c("% Quantile of interest is ", RegQ), sep='')
   cat(c("\n"))
+  # printing additional comments
+  if(length(comments != 0)){
+    cat(c("%",comments,"\n"),sep=" ")
+  }
+  
+  # writing caption and opening information
+  if(length(caption) != 0){
+    cat("\\begin{table}[h!]\n") # controling location of table
+    # printing caption, option for both short and long captions
+    if(length(capShort) == 0){
+      cat(c("\\caption{",caption,"}"),sep='')
+    }else{
+      cat(c("\\caption[",capShort,']{',caption,"}"),sep='')
+    }
+    
+    # adding label
+    if(length(label) != 0){
+      cat("\\label{",label,"}",sep='')
+    }
+    cat("\\begin{center}\n") # centering
+    cat("\\begin{tabular}{l l l l l}\n") # justificaiton of columns
+    
+    cat("\n")
+    cat("\\hline\n")
+  }
+  
   
   # writing initial data
   
@@ -83,6 +126,15 @@ write_latex_qreg <- function(reg_obj        # regression object
     
     cat(c(name_var[i], format(anova_mat[i,1],scientific=TRUE,digits=dec_co), format(anova_mat[i,2],scientific=TRUE,digits=dec_co), format(anova_mat[i,3],scientific=TRUE,digits=dec_co), format(anova_mat[i,4],scientific=TRUE,digits=dec_co)), sep="\t&\t")
     cat(c("\\\\", "\n"))
+  }
+  
+  # adding statements to end table
+  if(length(caption) != 0){
+    # closing information for table
+    cat("\\hline")
+    cat("\\end{tabular}\n")
+    cat("\\end{center}\n")
+    cat("\\end{table}")
   }
   
   # closing connection so output is no longer written to file
