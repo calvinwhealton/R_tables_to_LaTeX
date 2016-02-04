@@ -8,3 +8,5 @@
 .Rhistory
 
 *.lot
+
+func_write_qregnl_latex.R
