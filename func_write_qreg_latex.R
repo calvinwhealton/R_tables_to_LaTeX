@@ -1,4 +1,4 @@
-# funciton for writing OLS ANOVA tables into LaTeX tables----
+# funciton for writing quantile ANOVA tables into LaTeX tables----
 # output can include more regression results as defined by user
 write_latex_qreg <- function(reg_obj        # regression object
                             , xs            # columns for x vectors

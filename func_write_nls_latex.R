@@ -1,4 +1,4 @@
-# funciton for writing OLS ANOVA tables into LaTeX tables----
+# funciton for writing NLS ANOVA tables into LaTeX tables----
 # output can include more regression results as defined by user
 write_latex_nls <- function(reg_obj         # regression object
                             , name_tex      # name for latex table 
