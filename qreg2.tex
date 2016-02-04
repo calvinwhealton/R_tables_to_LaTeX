@@ -1,0 +1,23 @@
+%	2016-02-04 15:40:33
+% output from R quantile regression
+% Quantile of interest is 0.5
+% This is an example for writing an entire table from R 
+\begin{table}[h!]
+\caption[Quantile regression table all from R]{A quantile regression table from R.}\label{qreg}\begin{center}
+\begin{tabular}{l l l l l}
+
+\hline
+AE 0.10	&	0.175	&		&	DoF	&	97\\ 
+AE 0.25	&	0.425	&		&	MAE	&	0.827\\ 
+AE 0.50	&	0.813	&		&	pseudoR2	&	0.9833\\ 
+AE 0.75	&	1.221	&		&	Reps.	&	5000\\ 
+AE 0.90	&	1.521	&		&		&	\\ 
+\hline
+Variable	&	Est. Coeff.	&	Std. Error	&	t Stat.	&	Pr($>|t|$)\\ 
+\hline
+b0	&	5.113e+00	&	5.871e-01	&	8.709e+00	&	3.067e-18\\ 
+bx1	&	4.958e-01	&	6.786e-03	&	7.307e+01	&	0e+00\\ 
+bx2	&	2.002e+00	&	6.164e-03	&	3.247e+02	&	0e+00\\ 
+\hline\end{tabular}
+\end{center}
+\end{table}
