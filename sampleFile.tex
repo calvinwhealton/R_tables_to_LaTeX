@@ -14,7 +14,6 @@
 
 This is an example file showing how regression tables from R can be imported into \LaTeX using the code available on \texttt{https://github.com/calvinwhealton/R\_tables\_to\_LaTeX}.
 
-
 \section{Ordinary Least Squares}
 
 \begin{table}[h!]
@@ -47,7 +46,6 @@ This is an example file showing how regression tables from R can be imported int
 
 \input{nls2.tex}
 
-
 \section{Quantile Regression}
 
 \begin{table}[h!]
@@ -62,5 +60,21 @@ This is an example file showing how regression tables from R can be imported int
 \end{table}
 
 \input{qreg2.tex}
+
+\section{Data Frames}
+
+\begin{table}[h!]
+\caption{A data drame written from R but with other table information (caption, label, environment) written in \LaTeX.}\label{df1}
+\begin{center}
+\begin{tabular}{l r c}
+\hline
+\input{df1.tex}
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\input{df2.tex}
+
 
 \end{document}
