@@ -8,6 +8,7 @@ library('quantreg')
 source('func_write_ols_latex.R')
 source('func_write_nls_latex.R')
 source('func_write_qreg_latex.R')
+source('func_write_df_latex.R')
 
 # tables using lm() for ordinary least squares regression (OLS)----
 # generating some random data for the OLS model
@@ -77,7 +78,7 @@ x2 <- runif(100,0,100) # second predictor
 y <- 5 + 0.5*x1 + 2*x2 + rnorm(100,0,1)
 exData <- as.data.frame(cbind(y,x1,x2))
 
-# ordinary least squares (OLS) model
+# quantile regression model
 qreg.mod <- rq(y ~ x1 + x2, data=exData)
 write_latex_qreg(reg_obj=qreg.mod       # regression object
                 ,name_tex='qreg1.tex' # name for latex table 
@@ -96,3 +97,23 @@ write_latex_qreg(reg_obj=qreg.mod# regression object
                 , label = "qreg"               # label for the table
 )
 
+
+# tables for data frames----
+# generating some random data for the quantile model
+set.seed(10)
+x1 <- runif(10,0,100) # first predictor
+x2 <- runif(10,0,100) # second predictor
+y <- 5 + 0.5*x1 + 2*x2 + rnorm(10,0,1)
+exData <- as.data.frame(cbind(y,x1,x2))
+
+# writing LaTeX tables
+write_latex_df(exData
+                , 'df1.tex'
+)
+write_latex_df(exData
+               , 'df2.tex'
+               , name_var=c('A','B','C') # names of variables
+               , caption='A data frame with different numbers of significant figures. There is no short caption.'  # caption for table, long caption
+               , label='df2'    # label for the table
+               , dec_sf=c(2,4,6)      # number of decimals
+)
